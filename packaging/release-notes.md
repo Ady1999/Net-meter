@@ -9,7 +9,7 @@ NetMeter: network speed, CPU, memory, GPU, disk and temperatures in your Windows
 | **NetMeter-Setup-{VERSION}.exe** | Installer: the easy option. No admin rights needed. Adds a Start-menu shortcut and can start NetMeter when you sign in. |
 | **NetMeter-portable-{VERSION}.zip** | The same app without installing. Unzip it anywhere and run `NetMeter.exe`. |
 
-Windows 10 or 11, 64-bit. Python is not needed. The files appear here a couple of minutes after the release is published, once the automatic build finishes.
+Windows 10 or 11, 64-bit. Python is not needed.
 
 > Windows SmartScreen may say "Windows protected your PC", because the app isn't signed with a paid certificate. Click **More info › Run anyway**.
 

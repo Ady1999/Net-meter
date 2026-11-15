@@ -194,10 +194,6 @@ Every push runs [`.github/workflows/build.yml`](.github/workflows/build.yml) on 
 3. **The app is started on that Windows machine** (`NetMeter.exe --self-test report.json`). It attaches to the real taskbar, runs for a few seconds, and records what it found. The build fails if anything went wrong.
 4. The installer and portable zip are built, and kept as downloads on the run's page.
 
-To publish a new version:
-1. Raise `VERSION` in `netmeter/config.py` and commit it to `main`.
-2. On GitHub, go to **Releases › Draft a new release**.
-3. Type the matching tag (for example `v2.1.0`), pick `main` as the target, and press **Publish release**.
-4. The workflow builds the app and attaches the installer and the portable zip to the release within a couple of minutes. If you leave the description empty, it fills in download instructions.
+To publish a new version, raise `VERSION` in `netmeter/config.py` and push to `main`. The build then publishes the release (for example `v2.1.1`), with the installer, the portable zip and full release notes. Pushes that don't change `VERSION` are built and tested but don't publish anything.
 
-Pushing the tag with git (`git tag v2.1.0`, then `git push origin v2.1.0`) works too.
+You can also make a release yourself (Releases › Draft a new release, with a tag such as `v2.1.1` that matches `VERSION`). The build then attaches the files to it.

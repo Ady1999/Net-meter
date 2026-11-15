@@ -59,6 +59,8 @@ jobs:
               exit 1
             fi
             ver="$base"
+          elif [[ "$GITHUB_REF" == refs/heads/main ]]; then
+            ver="$base"          # main is what gets released
           else
             ver="$base-dev.$GITHUB_RUN_NUMBER"
           fi
@@ -121,13 +123,25 @@ jobs:
             dist/self-test.*
 
       - name: Publish the release
-        if: startsWith(github.ref, 'refs/tags/v')
+        # tags: release that tag. main: release the version in netmeter/config.py the
+        # first time main is built with it (raise VERSION to publish a new release)
+        if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'push' && github.ref == 'refs/heads/main')
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           files=("dist/NetMeter-Setup-$NETMETER_VERSION.exe" "dist/NetMeter-portable-$NETMETER_VERSION.zip")
           sed "s/{VERSION}/$NETMETER_VERSION/g" packaging/release-notes.md > "$RUNNER_TEMP/notes.md"
+          if [[ "$GITHUB_REF" == refs/heads/main ]]; then
+            tag="v$NETMETER_VERSION"
+            if gh release view "$tag" >/dev/null 2>&1; then
+              echo "Release $tag already exists; raise VERSION in netmeter/config.py to publish a new one."
+            else
+              gh release create "$tag" "${files[@]}" --target "$GITHUB_SHA" \
+                --title "NetMeter $NETMETER_VERSION" --notes-file "$RUNNER_TEMP/notes.md"
+            fi
+            exit 0
+          fi
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
             # made on the website: attach the files, and fill in the text if it's empty
             gh release upload "$GITHUB_REF_NAME" "${files[@]}" --clobber
