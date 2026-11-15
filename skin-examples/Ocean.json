@@ -1,0 +1,10 @@
+{
+  "name": "Ocean",
+  "layout": "grid2",
+  "bg": "#04293a",
+  "text_color": "#ecf9ff",
+  "item_colors": {"up": "#f9b208", "down": "#64c9cf", "cpu": "#ecf9ff", "ram": "#ecf9ff"},
+  "font": {"family": "Segoe UI", "size": 10, "bold": true},
+  "padding": [10, 5],
+  "spacing": 14
+}
