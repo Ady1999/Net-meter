@@ -17,6 +17,32 @@ Windows SmartScreen may warn that the app isn't recognised, because it isn't sig
 
 If you used TrafficMonitor, turn off its "Auto run when Windows starts" so the two don't fight over the same spot on the taskbar. NetMeter imports TrafficMonitor's traffic history by itself (see below).
 
+## Screenshots
+
+**In the taskbar, next to the clock** (the screenshots also show it on a shorter taskbar and on a top taskbar)
+
+![NetMeter in the taskbar](docs/taskbar.png)
+
+**With a custom taskbar like Hitodama**: the stats attach to the end of the dock, in a panel that matches it
+
+![NetMeter next to a custom dock](docs/custom-dock.png)
+
+**Hover for details**
+
+![Tooltip](docs/tooltip.png)
+
+**On a taskbar at the left or right edge** (narrow and wide)
+
+<img src="docs/side-taskbar.png" alt="Side taskbars" width="420">
+
+**Traffic history**
+
+<img src="docs/history-list.png" alt="Traffic history list" width="420"> <img src="docs/history-calendar.png" alt="Traffic history calendar" width="420">
+
+**Skins for the floating window, and the Options window**
+
+<img src="docs/skins.png" alt="Skins" width="420"> <img src="docs/options.png" alt="Options" width="420">
+
 ## Where things are
 
 | | |
