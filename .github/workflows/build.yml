@@ -127,14 +127,15 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           files=("dist/NetMeter-Setup-$NETMETER_VERSION.exe" "dist/NetMeter-portable-$NETMETER_VERSION.zip")
+          sed "s/{VERSION}/$NETMETER_VERSION/g" packaging/release-notes.md > "$RUNNER_TEMP/notes.md"
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
             # made on the website: attach the files, and fill in the text if it's empty
             gh release upload "$GITHUB_REF_NAME" "${files[@]}" --clobber
             if [[ -z "$(gh release view "$GITHUB_REF_NAME" --json body --jq .body)" ]]; then
               gh release edit "$GITHUB_REF_NAME" --title "NetMeter $NETMETER_VERSION" \
-                --notes-file packaging/release-notes.md
+                --notes-file "$RUNNER_TEMP/notes.md"
             fi
           else
             gh release create "$GITHUB_REF_NAME" "${files[@]}" \
-              --title "NetMeter $NETMETER_VERSION" --notes-file packaging/release-notes.md
+              --title "NetMeter $NETMETER_VERSION" --notes-file "$RUNNER_TEMP/notes.md"
           fi
