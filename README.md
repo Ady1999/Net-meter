@@ -169,12 +169,9 @@ Every push runs [`.github/workflows/build.yml`](.github/workflows/build.yml) on 
 4. The installer and portable zip are built, and kept as downloads on the run's page.
 
 To publish a new version:
-1. Raise `VERSION` in `netmeter/config.py`.
-2. Commit, then push a matching tag:
-   ```bash
-   git tag v2.1.0
-   ```
-   ```bash
-   git push origin v2.1.0
-   ```
-   The same workflow then creates the GitHub Release with both downloads attached.
+1. Raise `VERSION` in `netmeter/config.py` and commit it to `main`.
+2. On GitHub, go to **Releases › Draft a new release**.
+3. Type the matching tag (for example `v2.1.0`), pick `main` as the target, and press **Publish release**.
+4. The workflow builds the app and attaches the installer and the portable zip to the release within a couple of minutes. If you leave the description empty, it fills in download instructions.
+
+Pushing the tag with git (`git tag v2.1.0`, then `git push origin v2.1.0`) works too.

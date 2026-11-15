@@ -2,13 +2,22 @@ name: Build
 
 # Every push: run the tests, build NetMeter.exe + the installer on Windows, run the app
 # for real on that Windows machine (self-test) and keep the files as a download.
-# Pushing a tag like v2.1.0 also publishes them as a GitHub Release.
+# A tag like v2.1.0 also publishes them as a GitHub Release. Either push the tag, or
+# create the release on GitHub (Releases > Draft a new release > tag v2.1.0) and this
+# attaches the installer and portable zip to it.
 on:
   push:
     branches: ["**"]
     tags: ["v*"]
+  release:
+    types: [published]
   pull_request:
   workflow_dispatch:
+
+# a release made on the website fires both "push tag" and "release": run them one at a time
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: false
 
 permissions:
   contents: write   # needed to publish releases
@@ -117,8 +126,15 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "$GITHUB_REF_NAME" \
-            "dist/NetMeter-Setup-$NETMETER_VERSION.exe" \
-            "dist/NetMeter-portable-$NETMETER_VERSION.zip" \
-            --title "NetMeter $NETMETER_VERSION" \
-            --notes-file packaging/release-notes.md
+          files=("dist/NetMeter-Setup-$NETMETER_VERSION.exe" "dist/NetMeter-portable-$NETMETER_VERSION.zip")
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            # made on the website: attach the files, and fill in the text if it's empty
+            gh release upload "$GITHUB_REF_NAME" "${files[@]}" --clobber
+            if [[ -z "$(gh release view "$GITHUB_REF_NAME" --json body --jq .body)" ]]; then
+              gh release edit "$GITHUB_REF_NAME" --title "NetMeter $NETMETER_VERSION" \
+                --notes-file packaging/release-notes.md
+            fi
+          else
+            gh release create "$GITHUB_REF_NAME" "${files[@]}" \
+              --title "NetMeter $NETMETER_VERSION" --notes-file packaging/release-notes.md
+          fi
